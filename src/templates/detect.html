@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+<h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900  dark:text-white text-center">Melanoma Detection</h1>
+<p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400 text-center">Fill form details to check the results.</p>
+
+
+<div class="w-[900px]" style="margin: 30px auto;">
+
+    <form action="/upload" class=" mx-auto bg-gray-50 shadow shadow-lg border-2 border-blue-200 rounded-lg" id="upload-file" method="post" enctype="multipart/form-data" style="width:600px; padding: 30px;">
+        <div class="mb-4">
+            <label for="id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Patient ID</label>
+            <input type="text" id="scid" class="shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Enter your patient id" required>
+          </div>
+          <div class="mb-4">
+            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+            <input type="name" id="scname" class="shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Enter your name" required>
+          </div>
+          <div class="mb-4">
+            <label for="age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
+            <input type="number" id="scage" class="shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Enter your age" required>
+          </div>
+          <div class="mb-4">
+          <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+            <select id="scgender" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option selected>Choose gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Others">Others</option>
+      
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location</label>
+            <input type="text"  id="sclocation" class="shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Enter your location" required>
+          </div>
+        <div class="custom-file">
+
+        
+
+            <div class="mx-auto p-9 flex items-center justify-center w-[900px]">
+              
+                <label for="dropzone-file" class="custom-label custom-drop-label flex flex-col items-center justify-center h-[40px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-300 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 w-[900px]" style="width:900px ;">
+                 
+                   <div id="imgselected" class="hidden flex flex-col items-center justify-center pt-5 pb-6 px-[100px]">
+                    <p class="text-[16x] font-bold text-green-400">Image selected successfully!</p>
+                </div>
+
+                  <div id="imguploadbox" class=" flex flex-col items-center justify-center pt-5 pb-6 px-[100px]">
+                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG</p>
+                    </div>
+                    <input onchange="notify()" id="dropzone-file" type="file" class="hidden"  name="file" id="customFile"/>
+                </label>
+            </div> 
+
+
+        </div>
+
+        <div>
+            <button type="submit" id="btn-predict" value="Detect" class=" text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 block " style="width:500px ; margin:20px auto;">Detect</button>
+
+        </div>
+    </form>
+
+   
+    <h3 id="result">
+        <span> </span>
+    </h3>
+
+
+</div>
+<script>
+    document.addEventListener('input', ()=>{
+        localStorage.setItem("scid",document.getElementById("scid").value)
+        localStorage.setItem("scname", document.getElementById("scname").value)
+        localStorage.setItem("scage", document.getElementById("scage").value)
+        localStorage.setItem("sclocation", document.getElementById("sclocation").value)
+        localStorage.setItem("scgender", document.getElementById("scgender").value)
+    
+    })
+
+    function notify(){
+      console.log("changed")
+      document.getElementById('imgselected').style.display="flex"
+      document.getElementById('imguploadbox').style.display="none"
+    }
+    
+</script>
+{% endblock %}
